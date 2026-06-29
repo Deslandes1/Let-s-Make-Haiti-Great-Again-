@@ -87,11 +87,12 @@ st.markdown("""
         margin: 10px 0;
     }
     .logo-text {
-        font-size: 1.4rem;
+        font-size: 1.1rem;
         font-weight: bold;
         color: #0066cc;
         text-shadow: 0 0 20px rgba(0,102,204,0.2);
         margin-top: 6px;
+        line-height: 1.3;
     }
     .embed-container {
         position: relative;
@@ -170,13 +171,12 @@ with st.sidebar:
 
     st.markdown("---")
 
-    # Logo: Spinning Blue Globe
+    # Logo: Spinning Blue Globe + company name
     st.markdown('<div class="logo-container">', unsafe_allow_html=True)
-    # Embed the globe animation (Three.js)
     globe_html = """
     <div class="globe-wrapper">
         <div id="globe-container" style="width:150px;height:150px;margin:0 auto;"></div>
-        <div class="logo-text">🧤 Blue Glove Spinning</div>
+        <div class="logo-text">Globalinternet.py Online Software Company</div>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script>
@@ -242,6 +242,7 @@ with st.sidebar:
     </script>
     """
     st.components.v1.html(globe_html, height=220)
+    st.markdown('</div>', unsafe_allow_html=True)
 
     st.markdown("---")
 
