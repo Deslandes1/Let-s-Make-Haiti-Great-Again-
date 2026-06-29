@@ -12,33 +12,99 @@ st.set_page_config(
     page_icon="🇭🇹"
 )
 
-# Custom CSS for a motivational, patriotic look
+# Custom CSS - Light Blue Theme
 st.markdown("""
 <style>
+    /* Main background and text */
+    .stApp {
+        background: linear-gradient(145deg, #e6f3ff 0%, #cce4f7 100%);
+        color: #1a2a3a;
+    }
+    [data-testid="stSidebar"] {
+        background: #d4e9ff;
+        border-right: 1px solid #a0c4e8;
+    }
+    [data-testid="stSidebar"] .stMarkdown,
+    [data-testid="stSidebar"] label,
+    [data-testid="stSidebar"] .stCaption {
+        color: #1a2a3a !important;
+    }
+    h1, h2, h3, h4, h5, h6, p, li, .stMarkdown, .stCaption, label {
+        color: #1a2a3a !important;
+    }
     .main-header {
         text-align: center;
         font-size: 3rem;
-        color: #1a2a6c;
+        color: #0066cc;
         font-weight: bold;
         margin-bottom: 0;
+        text-shadow: 0 0 30px rgba(0,102,204,0.15);
     }
     .sub-header {
         text-align: center;
         font-size: 1.2rem;
-        color: #2c3e50;
+        color: #1a2a3a;
         margin-top: -10px;
         margin-bottom: 30px;
     }
-    .sidebar .sidebar-content {
-        background: #f0f2f6;
+    .profile-img {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 3px solid #0066cc;
+        display: block;
+        margin: 0 auto 8px auto;
+        box-shadow: 0 4px 12px rgba(0,80,160,0.2);
+    }
+    .profile-name {
+        color: #0066cc;
+        text-align: center;
+        margin-top: 8px;
+        margin-bottom: 0;
+        font-size: 1.2rem;
+        font-weight: 600;
+    }
+    .profile-title {
+        color: #2a4a6a;
+        text-align: center;
+        font-size: 0.9rem;
+        margin-top: 0;
+    }
+    .contact-info {
+        background: rgba(255,255,255,0.6);
+        border: 1px solid #88bce0;
+        border-radius: 8px;
+        padding: 12px;
+        font-size: 0.85rem;
+        color: #1a2a3a;
+    }
+    .contact-info strong {
+        color: #0066cc;
+    }
+    .logo-container {
+        text-align: center;
+        margin: 10px 0;
+    }
+    .logo-text {
+        font-size: 1.8rem;
+        font-weight: bold;
+        color: #0066cc;
+        text-shadow: 0 0 20px rgba(0,102,204,0.2);
+    }
+    .logo-sub {
+        font-size: 0.8rem;
+        color: #2a4a6a;
+        letter-spacing: 2px;
     }
     .embed-container {
         position: relative;
-        padding-bottom: 56.25%; /* 16:9 */
+        padding-bottom: 56.25%;
         height: 0;
         overflow: hidden;
         max-width: 100%;
         background: #000;
+        border-radius: 12px;
     }
     .embed-container iframe {
         position: absolute;
@@ -47,14 +113,75 @@ st.markdown("""
         width: 100%;
         height: 100%;
     }
+    .stButton>button {
+        background: linear-gradient(135deg, #4da6ff, #0066cc) !important;
+        color: #ffffff !important;
+        border: none !important;
+        border-radius: 8px !important;
+        font-weight: 600 !important;
+        box-shadow: 0 2px 8px rgba(0,80,160,0.2);
+    }
+    .stButton>button:hover {
+        transform: scale(1.02);
+        box-shadow: 0 4px 20px rgba(0,80,160,0.4);
+    }
+    .stTextInput>div>div>input, .stTextArea>div>div>textarea {
+        background-color: #ffffff !important;
+        color: #1a2a3a !important;
+        border: 1px solid #88bce0 !important;
+        border-radius: 8px !important;
+    }
+    .footer {
+        text-align: center;
+        padding: 20px 0;
+        border-top: 1px solid #88bce0;
+        margin-top: 30px;
+        color: #2a4a6a;
+        font-size: 0.9rem;
+    }
+    .stAlert {
+        padding: 6px 12px;
+        margin-top: 4px;
+        margin-bottom: 4px;
+    }
 </style>
 """, unsafe_allow_html=True)
 
+# Header
 st.markdown('<div class="main-header">🇭🇹 Let\'s Make Haiti Great Again</div>', unsafe_allow_html=True)
 st.markdown('<div class="sub-header">Upload your vision, speak your truth – powered by AI</div>', unsafe_allow_html=True)
 
 # Sidebar
 with st.sidebar:
+    # Profile Picture
+    st.markdown("""
+    <img src="https://raw.githubusercontent.com/Deslandes1/Let-s-Make-Haiti-Great-Again-/main/Gesner%20Deslandes.png" class="profile-img">
+    <h3 class="profile-name">Gesner Deslandes</h3>
+    <p class="profile-title">Founder, Let's Make Haiti Great Again</p>
+    """, unsafe_allow_html=True)
+
+    st.markdown("---")
+
+    # Logo: Blue Glove Spinning
+    st.markdown("""
+    <div class="logo-container">
+        <div class="logo-text">🧤 Blue Glove Spinning</div>
+        <div class="logo-sub">— TECHNOLOGY FOR HAITI —</div>
+    </div>
+    """, unsafe_allow_html=True)
+
+    st.markdown("---")
+
+    # Contact Info
+    st.markdown("""
+    <div class="contact-info">
+        <strong>📧 Email:</strong> deslandes78@gmail.com<br>
+        <strong>📱 Phone:</strong> (509) 4738-5663<br>
+    </div>
+    """, unsafe_allow_html=True)
+
+    st.markdown("---")
+
     st.header("📝 Your Message")
     script_text = st.text_area(
         "Paste your text (French or English)",
@@ -112,19 +239,23 @@ with tab2:
     st.subheader("Paste an embed link (YouTube, Vimeo, Dropbox, etc.)")
     embed_url = st.text_input("URL", placeholder="https://www.youtube.com/embed/... or https://www.dropbox.com/s/...")
     if embed_url:
-        # Try to auto-detect if it's a YouTube watch link and convert to embed
+        # Auto-detect YouTube and convert to embed
         if "youtube.com/watch?v=" in embed_url:
             video_id = embed_url.split("v=")[1].split("&")[0]
             embed_url = f"https://www.youtube.com/embed/{video_id}"
         elif "youtu.be/" in embed_url:
             video_id = embed_url.split("youtu.be/")[1].split("?")[0]
             embed_url = f"https://www.youtube.com/embed/{video_id}"
-        # For Dropbox, change ?dl=0 to ?raw=1
+        # Dropbox: change ?dl=0 to ?raw=1
         if "dropbox.com" in embed_url and "dl=0" in embed_url:
             embed_url = embed_url.replace("dl=0", "raw=1")
         # Display the embed
         st.markdown(f'<div class="embed-container"><iframe src="{embed_url}" frameborder="0" allowfullscreen></iframe></div>', unsafe_allow_html=True)
 
 # Footer
-st.markdown("---")
-st.markdown("Made with ❤️ by Gesner Deslandes | Let's Make Haiti Great Again 🇭🇹")
+st.markdown("""
+<div class="footer">
+    <p>Made with ❤️ by Gesner Deslandes | Let's Make Haiti Great Again 🇭🇹</p>
+    <p style="font-size:0.8rem; color:#2a4a6a;">📧 deslandes78@gmail.com | 📱 (509) 4738-5663</p>
+</div>
+""", unsafe_allow_html=True)
