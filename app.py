@@ -32,6 +32,21 @@ st.markdown("""
     .sidebar .sidebar-content {
         background: #f0f2f6;
     }
+    .embed-container {
+        position: relative;
+        padding-bottom: 56.25%; /* 16:9 */
+        height: 0;
+        overflow: hidden;
+        max-width: 100%;
+        background: #000;
+    }
+    .embed-container iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
 </style>
 """, unsafe_allow_html=True)
 
@@ -47,18 +62,13 @@ with st.sidebar:
         placeholder="Écris ton message pour bâtir un Haïti meilleur..."
     )
 
-    # TTS language selection (auto-detect or manual)
     lang = st.selectbox("Language", ["fr", "en"], index=0)
-
-    # Female voice option (gTTS doesn't support gender, but we can use pyttsx3 fallback)
     use_female = st.checkbox("Female voice (prefer if available)", value=True)
 
-    # Generate audio button
     if st.button("🔊 Generate & Play Audio"):
         if script_text.strip():
             with st.spinner("Generating voice..."):
                 try:
-                    # Use gTTS (fast, online)
                     tts = gTTS(text=script_text, lang=lang, slow=False)
                     with tempfile.NamedTemporaryFile(delete=False, suffix=".mp3") as f:
                         tts.save(f.name)
@@ -71,48 +81,49 @@ with st.sidebar:
         else:
             st.warning("Please paste some text first.")
 
-    # Display audio if exists
     if 'audio_file' in st.session_state and os.path.exists(st.session_state['audio_file']):
         st.audio(st.session_state['audio_file'], format="audio/mp3", autoplay=True)
         st.caption(f"🔊 Speaking: {st.session_state['audio_text'][:100]}...")
 
     st.markdown("---")
-    st.header("📺 Live TikTok Embed")
+    st.header("📺 Live TikTok Embed (optional)")
     tiktok_url = st.text_input("Paste TikTok Live URL", placeholder="https://www.tiktok.com/@username/live")
     if tiktok_url:
         st.markdown(f'<iframe src="{tiktok_url}" width="100%" height="400" frameborder="0" allowfullscreen></iframe>', unsafe_allow_html=True)
 
-# Main area
-col1, col2 = st.columns([2, 1])
+# Main area – choose between Upload or Embed
+tab1, tab2 = st.tabs(["📤 Upload Media", "🔗 Embed Link"])
 
-with col1:
-    st.subheader("🖼️ Upload Media")
-    uploaded_file = st.file_uploader("Choose an image or video", type=["jpg", "jpeg", "png", "mp4", "mov", "avi"])
+with tab1:
+    st.subheader("Upload an image or video")
+    uploaded_file = st.file_uploader("Choose file", type=["jpg", "jpeg", "png", "mp4", "mov", "avi"])
 
     if uploaded_file is not None:
-        # Save to a temporary file
         with tempfile.NamedTemporaryFile(delete=False, suffix=f".{uploaded_file.name.split('.')[-1]}") as tmp:
             tmp.write(uploaded_file.read())
             media_path = tmp.name
 
-        # Display based on file type
         if uploaded_file.type.startswith("video"):
             st.video(media_path, format="video/mp4")
         else:
             st.image(media_path, use_column_width=True)
-    else:
-        st.info("👆 Upload an image or video to get started.")
 
-with col2:
-    st.subheader("🎯 Your Mission")
-    st.markdown("""
-    - **Upload** your media (a photo of a project, a video of a community effort).
-    - **Write** a compelling message in the sidebar.
-    - **Generate** the female AI voice and let it speak your words.
-    - **Embed** your TikTok live stream to reach the world.
-
-    Together, we build a new Haiti – with technology, passion, and unity.
-    """)
+with tab2:
+    st.subheader("Paste an embed link (YouTube, Vimeo, Dropbox, etc.)")
+    embed_url = st.text_input("URL", placeholder="https://www.youtube.com/embed/... or https://www.dropbox.com/s/...")
+    if embed_url:
+        # Try to auto-detect if it's a YouTube watch link and convert to embed
+        if "youtube.com/watch?v=" in embed_url:
+            video_id = embed_url.split("v=")[1].split("&")[0]
+            embed_url = f"https://www.youtube.com/embed/{video_id}"
+        elif "youtu.be/" in embed_url:
+            video_id = embed_url.split("youtu.be/")[1].split("?")[0]
+            embed_url = f"https://www.youtube.com/embed/{video_id}"
+        # For Dropbox, change ?dl=0 to ?raw=1
+        if "dropbox.com" in embed_url and "dl=0" in embed_url:
+            embed_url = embed_url.replace("dl=0", "raw=1")
+        # Display the embed
+        st.markdown(f'<div class="embed-container"><iframe src="{embed_url}" frameborder="0" allowfullscreen></iframe></div>', unsafe_allow_html=True)
 
 # Footer
 st.markdown("---")
